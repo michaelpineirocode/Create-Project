@@ -1,0 +1,4 @@
+Simulation created by Michael Pineiro
+in 2022 at Colorado School of Mines.
+
+Inspired by the game "Plague Inc."
