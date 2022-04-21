@@ -16,24 +16,32 @@ bool open_file(ifstream &ifile, const string FILENAME) {
     }
 }
 
-list<string> read_from_csv(ifstream &ifile, const int columnNum) {
-    char c;
+list<string> read_from_csv(ifstream &ifile, const int columnNum){
+    string currentLine;
     string currentWord = "";
     list<string> words;
     int commas = 0;
     
-    while(ifile.get(c)) { // iterate through every character in the file
-        if(isspace(c) == 0) { // if c is not whitespace
-            currentWord.append(1, c); // add to the current word
-        } else if((isspace(currentWord[0]) == 0) && currentWord != "") { // if it is whitespace and the string is not a whitespace char thusfar or empty
-            words.push_back(currentWord); // send a new word
-            currentWord = "";
-        }
-    }
-    if(currentWord != ",") { // if it is whitespace and the string is not solely whitespace thusfar
-        commas++;
-        if(commas == columnNum) {
-            words.push_back(currentWord); // send a new word
+    while(getline(ifile, currentLine)) { // iterate through every character in the file
+        //cout <<  currentLine << endl;
+        commas = 0;
+        currentWord = "";
+        for(int i = 0; i < currentLine.size(); i++) {
+            char c = currentLine.at(i);
+            //cout << c;
+            //cout << c << endl;
+            if(c == ',') { // if it is whitespace and the string is not solely whitespace thusfar
+                commas++;
+                if(commas == columnNum) {
+                    words.push_back(currentWord); // send a new word
+                    break;
+                } else {
+                    currentWord = "";
+                }
+            } else {
+                //cout << c;// << "!";
+                currentWord.append(1, c);
+            }
         }
     }
     return words;

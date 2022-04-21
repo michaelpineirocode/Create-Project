@@ -5,6 +5,8 @@
  * References:
  * Create a operator== for a class
  * https://stackoverflow.com/questions/37436468/invalid-operands-to-binary-expression-radiodevice-and-const-radiodevice
+ * Use default destructor
+ * https://stackoverflow.com/questions/13576055/how-is-default-different-from-for-default-constructor-and-destructor
  * 
  * Description: 
  */
@@ -23,9 +25,7 @@ using namespace std;
 int main() {
     srand(time(0));
     ifstream csv;
-    open_file(csv, "Data/population2020");
+    open_file(csv, "Data/population.csv");
     list<string> countryNames= read_from_csv(csv, 1);
-    for(int i = 0; i < countryNames.size(); i++) {
-        cout << get(countryNames, i) << endl;
-    }
+    list<string> populations = read_from_csv(csv, 2);
 }

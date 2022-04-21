@@ -50,24 +50,38 @@ class Country {
 
 
 Country::Country(const string NAME, const int POPULATION) {
-
+    name = NAME;
+    population = POPULATION;
 }
 
 Country::Country(const string NAME, const int POPULATION, const int INFECTED, const int VACCINATED) {
-
+    name = NAME;
+    population = POPULATION;
+    infected = INFECTED;
+    vaccinated = VACCINATED;
 }
 
 Country& Country::operator=(const Country& OTHER) {
-
+    if(this == &OTHER) {
+        return * this;
+    }
+    this->name = OTHER.name;
+    this->infected = OTHER.infected;
+    this->infectRate = OTHER.infectRate;
+    this->spreadRate = OTHER.spreadRate;
+    this->vaccinated = OTHER.vaccinated;
+    return *this;
 }
 
 bool operator==(const Country& COUNTRY, const Country& OTHER) {
-    
+    if(COUNTRY.name == OTHER.name) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
-Country::~Country() {
-
-}
+Country::~Country() = default;
 
 void Country::new_day(int& totalInfected, list<Country>& untouched, list<Country>& infectedCountry) {
     infect(infectRate, infected, totalInfected);
