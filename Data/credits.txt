@@ -1,4 +1,8 @@
 Simulation created by Michael Pineiro
 in 2022 at Colorado School of Mines.
 
+Country data provided by Tanu N. Prabhu
+https://www.kaggle.com/datasets/tanuprabhu/
+population-by-country-2020?resource=download
+
 Inspired by the game "Plague Inc."

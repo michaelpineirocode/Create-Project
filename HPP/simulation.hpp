@@ -1,10 +1,9 @@
-#ifndef SIM_H
-#define SIM_H
+#ifndef SIMULATION_H
+#define SIMULATION_H
 
 #include <cstdlib>
 #include <fstream>
 #include <list>
-#include "country.hpp"
 
 using namespace std;
 
@@ -45,21 +44,12 @@ int rand_int(const int MIN, const int MAX) {
     return num;
 }
 
-Country get(list<Country> list1, const int INDEX) {
-    typename list<Country>::iterator it;
+template <typename T>
+T get(list<T> list1, const int INDEX) {
+    typename list<T>::iterator it;
     it = list1.begin();
     advance(it, INDEX);
     return *it;
-}
-
-void spreadToCountry(list<Country>& infected, list<Country>& untouched) {
-    if(untouched.size() == 0) {
-        return;
-    } else {
-        const Country infectedCountry = get(untouched, rand_int(0, untouched.size() - 1));
-        infected.push_back(infectedCountry);
-        untouched.remove(infectedCountry);
-    }
 }
 
 #endif
