@@ -6,13 +6,17 @@
 #include "country.hpp"
 
 void Game(const list<string> countryNames, list<int> population) {
-    list<Country> countries; // create all countries
+    list<Country> untouched; // create all countries
+    list<Country> infected;
     for(int i = 0; i < countryNames.size(); i++) {
         Country country(get(countryNames, i), get(population, i));
-        countries.push_back(country);
+        untouched.push_back(country);
     }
-    const Country groundZero = get(countries, rand_int(1, countries.size())); // pick a random country
-    cout << groundZero.name;
+
+    const Country groundZero = get(untouched, rand_int(1, untouched.size())); // pick a random country
+    untouched.remove(groundZero);
+    cout << "Ground Zero is " << groundZero.name << " with a population of " << groundZero.get_population() << endl;
+    
 }
 
 int menu_screen() {

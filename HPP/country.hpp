@@ -24,11 +24,11 @@ class Country {
 
         // getters!
         void print_info();
-        int get_population();
-        int get_infected();
-        int get_infect_rate();
-        int get_spread_rate();
-        int get_vaccinated();
+        int get_population() const;
+        int get_infected() const;
+        int get_infect_rate() const;
+        int get_spread_rate() const;
+        int get_vaccinated() const;
 
         Country get(list<Country> list1, const int INDEX);
 
@@ -108,23 +108,23 @@ void Country::print_info() {
 
 }
 
-int Country::get_population() {
+int Country::get_population() const{
     return population;
 }
 
-int Country::get_infected() {
+int Country::get_infected() const{
     return infected;
 }
 
-int Country::get_infect_rate() {
+int Country::get_infect_rate() const{
     return infectRate;
 }
 
-int Country::get_spread_rate() {
+int Country::get_spread_rate() const{
     return spreadRate;
 }
 
-int Country::get_vaccinated() {
+int Country::get_vaccinated() const{
     return vaccinated;
 }
 

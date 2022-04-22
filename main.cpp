@@ -7,6 +7,8 @@
  * https://stackoverflow.com/questions/37436468/invalid-operands-to-binary-expression-radiodevice-and-const-radiodevice
  * Use default destructor
  * https://stackoverflow.com/questions/13576055/how-is-default-different-from-for-default-constructor-and-destructor
+ * How to wait for enter
+ * https://stackoverflow.com/questions/21257544/c-wait-for-user-input
  * 
  * Description: 
  */
