@@ -22,16 +22,31 @@ int get_user_input(const int MIN, const int MAX) {
         while(!(cin >> option)) {
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Please enter an option" << MIN << endl;
+            cout << "Please enter an option"<< endl;
         }
         // ensures that the integer is between the bounds
         if ((option >= MIN) && (option <= MAX)) {
             correctOption = true;
         } else {
-            cout << "Please enter an option" << MIN << endl;
+            cout << "Please enter an option" << endl;
         }
     }
     return option;
+}
+
+void wait_for_enter(bool doTwice=true) {
+    cin.get();
+    if(doTwice) {
+        cin.get();
+    }
+}
+
+void clear_screen() {
+#if defined(WIN32) || defined(_WIN32) || defined (__WIN32__) || defined(__NT__) || defined(_WIN64)
+    system("cls");
+#else
+    system("clear");
+#endif
 }
 
 bool open_file(ifstream &ifile, const string FILENAME) {

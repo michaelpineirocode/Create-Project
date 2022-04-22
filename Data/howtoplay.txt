@@ -1,0 +1,3 @@
+How to Simulate
+---------------------
+The simulation increments in days. Press enter to move to the next day.

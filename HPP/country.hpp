@@ -17,10 +17,13 @@ class Country {
         Country(const string NAME, const int POPULATION, const int INFECTED, const int VACCINATED);
         Country& operator=(const Country& OTHER);
         ~Country();
+        
         // public attributes
         string name;
+        
         // public operations
-        void new_day(int& total_infected, list<Country>& untouched, list<Country>& infectedCountry);
+        void new_day( int& totalInfected, list<Country>& untouched, list<Country>& infectedCountry);
+        void infect();
 
         // getters!
         void print_info();
@@ -31,6 +34,7 @@ class Country {
         int get_vaccinated() const;
 
         Country get(list<Country> list1, const int INDEX);
+        
 
     private:
         // private attributes
@@ -40,10 +44,11 @@ class Country {
         int spreadRate;
         int vaccinated;
 
-        void infect(const int infectRate, int& infected, int& totalInfected);
-        void update_infectRate(const int population, const int infected, int& infectRate);
-        void update_spreadRate(const int infectRate, int& spreadRate);
-        void spread(list<Country>& untouched, list<Country>& infectedCountry, int spreadRate);
+        // private operations
+        void infect(int& totalInfected);
+        void update_infectRate();
+        void update_spreadRate();
+        void spread(list<Country>& untouched, list<Country>& infectedCountry);
         void spreadToCountry(list<Country>& infected, list<Country>& untouched);
 
 };
@@ -90,11 +95,11 @@ bool operator==(const Country& COUNTRY, const Country& OTHER) {
 
 Country::~Country() = default;
 
-void Country::new_day(int& totalInfected, list<Country>& untouched, list<Country>& infectedCountry) {
-    infect(infectRate, infected, totalInfected);
-    update_infectRate(population, infected, infectRate);
-    update_spreadRate(infectRate, spreadRate);
-    spread(untouched, infectedCountry, spreadRate);
+void Country::new_day( int& totalInfected, list<Country>& untouched, list<Country>& infectedCountry) {
+    update_infectRate();
+    update_spreadRate();
+    infect(totalInfected);
+    spread(untouched, infectedCountry);
 
 }
 
@@ -128,29 +133,38 @@ int Country::get_vaccinated() const{
     return vaccinated;
 }
 
-void Country::update_infectRate(const int POPULATION, const int INFECTED, int& infectRate) {
+void Country::update_infectRate() {
     //const int CONT_FACTOR = ceil(double(1/1000) / (1 / POPULATION)) ; // helps smooth scaling between different populations
     //infectRate = (double(INFECTED) / POPULATION) * CONT_FACTOR;
-    infectRate = ceil((INFECTED / POPULATION) * 1000);
+    infectRate = infectRate + ceil((infected / population) * 5000);
+    if(rand_int(1, 3) == 2) {
+        infectRate++;
+    }
 }
 
-void Country::update_spreadRate(const int infectRate, int& spreadRate) {
+void Country::update_spreadRate() {
     spreadRate = infectRate / 100;
 }
 
-void Country::spread(list<Country>& untouched, list<Country>& infected, const int spreadRate) {
+void Country::spread(list<Country>& untouched, list<Country>& infected) {
     if(rand_int(0, 1001) < spreadRate) {
         spreadToCountry(infected, untouched);
     }
 }
 
-void Country::infect(const int infectRate, int& infected, int& totalInfected) {
+void Country::infect(int& totalInfected) {
     for(int i = 0; i < infected; i ++) { // for each infected person
         int ODDS = rand_int(0, 1001);
         if(ODDS < infectRate) {
             infected++;
             totalInfected++;
         }
+    }
+}
+
+void Country::infect() {
+    if(infected == 0) {
+        infected++;
     }
 }
 

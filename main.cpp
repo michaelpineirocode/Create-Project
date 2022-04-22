@@ -9,6 +9,10 @@
  * https://stackoverflow.com/questions/13576055/how-is-default-different-from-for-default-constructor-and-destructor
  * How to wait for enter
  * https://stackoverflow.com/questions/21257544/c-wait-for-user-input
+ * How to define OS
+ * https://stackoverflow.com/questions/5919996/how-to-detect-reliably-mac-os-x-ios-linux-windows-in-c-preprocessor
+ * How to access cmd or terminal
+ * https://stackoverflow.com/questions/14532496/try-to-execute-command-line-codes-from-c-linux
  * 
  * Description: 
  */
@@ -42,7 +46,7 @@ int main() {
         cout << "Goodbye!";
         return 1;
     } else {
-        Game(countryNames, population);
+        Simulate(countryNames, population);
     }
     
 
