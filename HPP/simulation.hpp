@@ -7,6 +7,33 @@
 
 using namespace std;
 
+/**
+  * @brief Gets user input between two bounds
+  * 
+  * @param MIN the minimum bound
+  * @param MAX  the maximum bound
+  * @return int the choice of the user
+  */
+int get_user_input(const int MIN, const int MAX) {
+    int option;
+    bool correctOption = false;
+    while(!correctOption) {
+        // if the option is not an integer, continues to try to get input
+        while(!(cin >> option)) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Please enter an option" << MIN << endl;
+        }
+        // ensures that the integer is between the bounds
+        if ((option >= MIN) && (option <= MAX)) {
+            correctOption = true;
+        } else {
+            cout << "Please enter an option" << MIN << endl;
+        }
+    }
+    return option;
+}
+
 bool open_file(ifstream &ifile, const string FILENAME) {
     ifile.open(FILENAME); // opens the file
     if(ifile.fail()) { // checks if it failed
@@ -16,12 +43,14 @@ bool open_file(ifstream &ifile, const string FILENAME) {
     }
 }
 
-list<string> read_from_csv(ifstream &ifile, const int columnNum){
+list<string> read_ifstream_to_list(ifstream &ifile, const int columnNum, const char DELIM, bool skipFirstLine = false){
     string currentLine;
     string currentWord = "";
     list<string> words;
     int commas = 0;
-    
+    if(skipFirstLine) {
+        getline(ifile, currentWord); // need to iterate through once to avoid headers
+    }
     while(getline(ifile, currentLine)) { // iterate through every character in the file
         //cout <<  currentLine << endl;
         commas = 0;
@@ -30,7 +59,7 @@ list<string> read_from_csv(ifstream &ifile, const int columnNum){
             char c = currentLine.at(i);
             //cout << c;
             //cout << c << endl;
-            if(c == ',') { // if it is whitespace and the string is not solely whitespace thusfar
+            if(c == DELIM) { // if it is whitespace and the string is not solely whitespace thusfar
                 commas++;
                 if(commas == columnNum) {
                     words.push_back(currentWord); // send a new word
@@ -58,6 +87,21 @@ T get(list<T> list1, const int INDEX) {
     it = list1.begin();
     advance(it, INDEX);
     return *it;
+}
+
+list<int> string_to_int(const list<string> OTHER) {
+    list<int> current;
+    for(int i = 0; i < OTHER.size(); i++) {
+        current.push_back(stoi(get(OTHER, i)));
+    }
+    return current;
+}
+
+template <typename T>
+void print(const list<T> OTHER) {
+    for(int i = 0; i < OTHER.size(); i++) {
+        cout << get(OTHER, i) << endl;
+    }
 }
 
 #endif
