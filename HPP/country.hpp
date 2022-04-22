@@ -136,7 +136,8 @@ int Country::get_vaccinated() const{
 void Country::update_infectRate() {
     //const int CONT_FACTOR = ceil(double(1/1000) / (1 / POPULATION)) ; // helps smooth scaling between different populations
     //infectRate = (double(INFECTED) / POPULATION) * CONT_FACTOR;
-    infectRate = infectRate + ceil((infected / population) * 5000);
+    infectRate = ceil(((double)infected / population) * 5000);
+    cout << infectRate << endl;
     if(rand_int(1, 3) == 2) {
         infectRate++;
     }
@@ -155,7 +156,7 @@ void Country::spread(list<Country>& untouched, list<Country>& infected) {
 void Country::infect(int& totalInfected) {
     for(int i = 0; i < infected; i ++) { // for each infected person
         int ODDS = rand_int(0, 1001);
-        if(ODDS < infectRate) {
+        if(ODDS <= infectRate) {
             infected++;
             totalInfected++;
         }
@@ -175,6 +176,7 @@ void Country::spreadToCountry(list<Country>& infected, list<Country>& untouched)
         Country infectedCountry = get(untouched, rand_int(0, untouched.size() - 1));
         infected.push_back(infectedCountry);
         untouched.remove(infectedCountry);
+        infectedCountry.infect();
     }
 }
 
