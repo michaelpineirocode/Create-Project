@@ -6,7 +6,7 @@
 #include <string>
 #include <math.h>
 
-#include "simulation.hpp"
+#include "functions.hpp"
 
 using namespace std;
 
@@ -52,6 +52,10 @@ class Country {
 Country::Country(const string NAME, const int POPULATION) {
     name = NAME;
     population = POPULATION;
+    infected = 0;
+    infectRate = 0;
+    spreadRate = 0;
+    vaccinated = 0;
 }
 
 Country::Country(const string NAME, const int POPULATION, const int INFECTED, const int VACCINATED) {
@@ -59,6 +63,9 @@ Country::Country(const string NAME, const int POPULATION, const int INFECTED, co
     population = POPULATION;
     infected = INFECTED;
     vaccinated = VACCINATED;
+    infectRate = 0;
+    spreadRate = 0;
+    vaccinated = 0;
 }
 
 Country& Country::operator=(const Country& OTHER) {

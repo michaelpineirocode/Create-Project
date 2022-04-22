@@ -18,33 +18,10 @@
 #include <ctime>
 #include <string>
 #include "HPP/country.hpp"
+#include "HPP/functions.hpp"
 #include "HPP/simulation.hpp"
 
 using namespace std;
-
-int menu_screen() {
-    ifstream menuScreenInfo;
-    open_file(menuScreenInfo, "Data/menuscreeninfo.txt");
-    print(read_ifstream_to_list(menuScreenInfo, 1, ','));
-    const int menuOption = get_user_input(1, 3);
-    switch(menuOption) {
-        case 1: {
-            return 1;
-        }
-        case 2: {
-            ifstream menuScreenInfo;
-            open_file(menuScreenInfo, "Data/credits.txt");
-            print(read_ifstream_to_list(menuScreenInfo, 1, ','));
-            char waitForUser[] = "";
-            cin >> waitForUser;            
-            menu_screen();
-            return -1;
-        }
-        case 3: {
-            return -1;
-        }
-    }
-}
 
 int main() {
     srand(time(0));
@@ -62,6 +39,8 @@ int main() {
     if(menu_screen() == -1) {
         cout << "Goodbye!";
         return 1;
+    } else {
+        Game(countryNames, population);
     }
     
 
