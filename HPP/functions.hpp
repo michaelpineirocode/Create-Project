@@ -104,6 +104,14 @@ T get(list<T> list1, const int INDEX) {
     return *it;
 }
 
+template <typename T>
+typename list<T>::iterator iterate(const int INDEX,  list<T> list1) {
+    typename list<T>::iterator it;
+    it = list1.begin();
+    advance(it, INDEX);
+    return it;
+}
+
 list<int> string_to_int(const list<string> OTHER) {
     list<int> current;
     for(int i = 0; i < OTHER.size(); i++) {

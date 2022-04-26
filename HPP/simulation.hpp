@@ -28,15 +28,19 @@ void Simulate(const list<string> countryNames, list<int> population) {
     wait_for_enter();
     clear_screen();
     while(totalInfected != WORLD_POPULATION) {
-        clear_screen();
+        //clear_screen();
         cout << "Day: " << day << endl;
         day++;
+        cout << "Size: " << infectedCountries.size() << endl;
+        for(int i = 0; i < infectedCountries.size(); i++) {
+            Country current = get(infectedCountries, i);
+            current.print_info();
+        }
         for(int i = 0; i < infectedCountries.size(); i++) {
             Country current = get(infectedCountries, i);
             infectedCountries.remove(current);
             current.new_day(totalInfected, untouched, infectedCountries);
-            current.print_info();
-            infectedCountries.push_back(current);
+            infectedCountries.push_front(current);
         }
         wait_for_enter(false);
     }
