@@ -23,7 +23,7 @@ void Simulate(const list<string> countryNames, list<int> population) {
     groundZero.infect();
     untouched.remove(groundZero);
     infectedCountries.push_back(groundZero);
-    cout << "The first country go become infected is '" << groundZero.name << "' with a population of " << groundZero.get_population() << endl;
+    cout << "The first country to become infected is '" << groundZero.name << "' with a population of " << groundZero.get_population() << endl;
     cout << "Press enter to continue." << endl;
     wait_for_enter();
     clear_screen();
@@ -33,8 +33,10 @@ void Simulate(const list<string> countryNames, list<int> population) {
         day++;
         for(int i = 0; i < infectedCountries.size(); i++) {
             Country current = get(infectedCountries, i);
-            current.print_info();
+            infectedCountries.remove(current);
             current.new_day(totalInfected, untouched, infectedCountries);
+            current.print_info();
+            infectedCountries.push_back(current);
         }
         wait_for_enter(false);
     }

@@ -34,7 +34,6 @@ class Country {
         int get_vaccinated() const;
 
         Country get(list<Country> list1, const int INDEX);
-        
 
     private:
         // private attributes
@@ -136,7 +135,7 @@ int Country::get_vaccinated() const{
 void Country::update_infectRate() {
     //const int CONT_FACTOR = ceil(double(1/1000) / (1 / POPULATION)) ; // helps smooth scaling between different populations
     //infectRate = (double(INFECTED) / POPULATION) * CONT_FACTOR;
-    infectRate = ceil(((double)infected / population) * 5000);
+    infectRate = infectRate + ceil(((double)infected / population) * 5000);
     cout << infectRate << endl;
     if(rand_int(1, 3) == 2) {
         infectRate++;
