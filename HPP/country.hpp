@@ -14,7 +14,7 @@ class Country {
     public:
         // constructors!
         Country(const string NAME, const int POPULATION);
-        Country(const string NAME, const int POPULATION, const int INFECTED, const int VACCINATED, const int ID);
+        Country(const string NAME, const int POPULATION, const int INFECTED, const int ID);
         Country& operator=(const Country& OTHER);
         ~Country();
         
@@ -32,7 +32,6 @@ class Country {
         int get_infected() const;
         int get_infect_rate() const;
         int get_spread_rate() const;
-        int get_vaccinated() const;
 
         Country get(list<Country> list1, const int INDEX);
 
@@ -42,7 +41,6 @@ class Country {
         int infected;
         int infectRate;
         int spreadRate;
-        int vaccinated;
 
         // private operations
         void infect(int& totalInfected);
@@ -60,17 +58,14 @@ Country::Country(const string NAME, const int POPULATION) {
     infected = 0;
     infectRate = 0;
     spreadRate = 0;
-    vaccinated = 0;
 }
 
-Country::Country(const string NAME, const int POPULATION, const int INFECTED, const int VACCINATED, const int ID) {
+Country::Country(const string NAME, const int POPULATION, const int INFECTED, const int ID) {
     name = NAME;
     population = POPULATION;
     infected = INFECTED;
-    vaccinated = VACCINATED;
     infectRate = 0;
     spreadRate = 0;
-    vaccinated = 0;
     id = ID;
 }
 
@@ -82,7 +77,6 @@ Country& Country::operator=(const Country& OTHER) {
     this->infected = OTHER.infected;
     this->infectRate = OTHER.infectRate;
     this->spreadRate = OTHER.spreadRate;
-    this->vaccinated = OTHER.vaccinated;
     return *this;
 }
 
@@ -108,7 +102,6 @@ void Country::print_info() {
     cout << name << ":" << endl;
     cout << "\t" << "Population: " << population << endl;
     cout << "\t" << "Infected: " << infected << endl;
-    cout << "\t" << "Vaccinated: " << vaccinated << endl;
     cout << "\t" << "Infection Rate: " << "(" << infectRate << " / 1000) people per day" << endl;
     cout << "\t" << "Chance of Spreading: " << spreadRate << endl;
 
@@ -128,10 +121,6 @@ int Country::get_infect_rate() const{
 
 int Country::get_spread_rate() const{
     return spreadRate;
-}
-
-int Country::get_vaccinated() const{
-    return vaccinated;
 }
 
 void Country::update_infectRate() {

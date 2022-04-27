@@ -6,14 +6,14 @@
 #include "functions.hpp"
 #include "country.hpp"
 
-void Simulate(const list<string> countryNames, list<int> population) {
+int Simulate(const list<string> countryNames, list<int> population) {
     clear_screen();
 
     list<Country> untouched; // create all countries
     list<Country> infectedCountries;
     int totalInfected = 1;
     const long int WORLD_POPULATION = 7808449406;
-    int day = 0;
+    int day = 1;
     int lastID = 1;
 
     for(int i = 0; i < countryNames.size(); i++) {
@@ -36,7 +36,6 @@ void Simulate(const list<string> countryNames, list<int> population) {
         cout << "---------------------------------------------------------------------------------" << endl;
         cout << "Day: " << day << endl;
         day++;
-        cout << "Size: " << infectedCountries.size() << endl;
        
         // resort the list
         infectedCountries = mergeSort(infectedCountries);
@@ -52,6 +51,11 @@ void Simulate(const list<string> countryNames, list<int> population) {
             infectedCountries.remove(current);
             current.new_day(totalInfected, untouched, infectedCountries, lastID);
             infectedCountries.push_front(current);
+        }
+        if(totalInfected >= WORLD_POPULATION) {
+            cout << "The entire world has been infected in " << day << " days!" << endl;
+            wait_for_enter(false);
+            return 1;
         }
         wait_for_enter(false);
     }

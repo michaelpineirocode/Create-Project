@@ -34,11 +34,18 @@ int get_user_input(const int MIN, const int MAX) {
     return option;
 }
 
-void wait_for_enter(bool doTwice=true) {
-    cin.get();
-    if(doTwice) {
+int wait_for_enter(bool doTwice=true) {
+    string command;
+    getline(cin, command);
+    if(command == "skip") {
+        return 1;
+    } else if (command == "quit") {
+        return -1;
+    } else if(doTwice) {
         cin.get();
+        return 0;
     }
+    return 0;
 }
 
 void clear_screen() {
