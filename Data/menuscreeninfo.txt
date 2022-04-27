@@ -20,5 +20,6 @@
                                                                ,
                            1.) Start,
                            2.) Credits,
-                           3.) Exit,
+                           3.) How to play,
+                           4.) Exit,
                            ,

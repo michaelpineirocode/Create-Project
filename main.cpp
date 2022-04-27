@@ -43,6 +43,7 @@ int main() {
     list<int> population = string_to_int(populationRaw);
     populationRaw.clear(); // clear old list as it won't be used anymore
     if(menu_screen() == -1) {
+        clear_screen();
         cout << "Goodbye!";
         return 1;
     } else {

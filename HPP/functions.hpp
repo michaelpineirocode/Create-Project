@@ -196,4 +196,12 @@ list<T> mergeSort(list<T> list1) {
     return merge(left, right);
 }
 
+void print_file_to_screen(const string PATH) {
+    clear_screen();
+    ifstream menuScreenInfo;
+    open_file(menuScreenInfo, PATH);
+    print(read_ifstream_to_list(menuScreenInfo, 1, ','));
+    wait_for_enter();
+}
+
 #endif

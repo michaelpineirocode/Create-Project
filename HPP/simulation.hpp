@@ -63,26 +63,18 @@ int menu_screen() {
     ifstream menuScreenInfo;
     open_file(menuScreenInfo, "Data/menuscreeninfo.txt");
     print(read_ifstream_to_list(menuScreenInfo, 1, ','));
-    const int menuOption = get_user_input(1, 3);
+    const int menuOption = get_user_input(1, 4);
     switch(menuOption) {
         case 1: {
             return 1;
         }
         case 2: {
-            clear_screen();
-            ifstream menuScreenInfo;
-            open_file(menuScreenInfo, "Data/credits.txt");
-            print(read_ifstream_to_list(menuScreenInfo, 1, ','));
-            wait_for_enter();
+            print_file_to_screen("Data/credits.txt");
             menu_screen();
             return -1;
         }
         case 3: {
-            clear_screen();
-            ifstream menuScreenInfo;
-            open_file(menuScreenInfo, "Data/howtoplay.txt");
-            print(read_ifstream_to_list(menuScreenInfo, 1, ','));
-            wait_for_enter();
+            print_file_to_screen("Data/howtoplay.txt");
             menu_screen();
             return -1;
         }
