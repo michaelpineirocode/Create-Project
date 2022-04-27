@@ -127,4 +127,73 @@ void print(const list<T> OTHER) {
     }
 }
 
+template <typename T>
+list<T> remove(list<T> list1, const int INDEX) {
+    list<T> list2;
+    for(int i = 0; i < INDEX - 1; i++) {
+        list2.push_back(get(list1, i));
+    }
+    for(int i = INDEX + 1; i < list1.size(); i++) {
+        list2.push_back(get(list1, i));
+    }
+    return list2;
+}
+
+template <typename T>
+list<T> merge(list<T> list1, list<T> list2) {
+    
+    list<T> list3;
+    while((list1.size() > 0) && (list2.size() > 0)) { // while elements in both lists
+        if(get(list1, 0).id > get(list2, 0).id) { // check if list 1 is greater
+            list3.push_back(get(list2, 0)); // add to list 3
+            list2 = remove(list2, 0); // remove the element
+        }
+        else {
+            list3.push_back(get(list1, 0));
+            list1 = remove(list1, 0);
+        }
+    }
+    // one of the lists are empty now!
+    while(list1.size() > 0) {
+        list3.push_back(get(list1, 0));
+        list1 = remove(list1, 0);
+    }
+
+    while(list2.size() > 0) {
+        list3.push_back(get(list2, 0));
+        list2 = remove(list2, 0);
+    }
+
+    return list3;
+}
+
+template <typename T>
+list<T> mergeSort(list<T> list1) {
+    // base case
+    if(list1.size() <= 1) { 
+        return list1;
+    }
+
+    // divide and split
+    const int middle = (list1.size() / 2) - 1; // will round down
+    
+    
+    list<T> left; // create a lefthand list
+    for(int i = 0; i <= middle; i++) {
+        left.push_back(get(list1, i));
+       // cout << get(list1, i) << endl;
+    }
+
+    list<T> right; // create a righthand list
+    for(int i = middle + 1; i < list1.size(); i++) {
+        right.push_back(get(list1, i));
+    }
+
+    left = mergeSort(left);
+    right = mergeSort(right);
+
+    // ready to sort!
+    return merge(left, right);
+}
+
 #endif

@@ -8,11 +8,13 @@
 
 void Simulate(const list<string> countryNames, list<int> population) {
     clear_screen();
+
     list<Country> untouched; // create all countries
     list<Country> infectedCountries;
     int totalInfected = 1;
     const long int WORLD_POPULATION = 7808449406;
-    int day;
+    int day = 0;
+    int lastID = 1;
 
     for(int i = 0; i < countryNames.size(); i++) {
         Country country(get(countryNames, i), get(population, i));
@@ -21,25 +23,34 @@ void Simulate(const list<string> countryNames, list<int> population) {
 
     Country groundZero = get(untouched, rand_int(1, untouched.size())); // pick a random country
     groundZero.infect();
+    groundZero.id = lastID;
     untouched.remove(groundZero);
     infectedCountries.push_back(groundZero);
+    
     cout << "The first country to become infected is '" << groundZero.name << "' with a population of " << groundZero.get_population() << endl;
     cout << "Press enter to continue." << endl;
     wait_for_enter();
     clear_screen();
     while(totalInfected != WORLD_POPULATION) {
-        //clear_screen();
+        clear_screen();
+        cout << "---------------------------------------------------------------------------------" << endl;
         cout << "Day: " << day << endl;
         day++;
         cout << "Size: " << infectedCountries.size() << endl;
+       
+        // resort the list
+        infectedCountries = mergeSort(infectedCountries);
+       
+        // print every country
         for(int i = 0; i < infectedCountries.size(); i++) {
             Country current = get(infectedCountries, i);
             current.print_info();
         }
+        // a new day for each country
         for(int i = 0; i < infectedCountries.size(); i++) {
             Country current = get(infectedCountries, i);
             infectedCountries.remove(current);
-            current.new_day(totalInfected, untouched, infectedCountries);
+            current.new_day(totalInfected, untouched, infectedCountries, lastID);
             infectedCountries.push_front(current);
         }
         wait_for_enter(false);
@@ -67,6 +78,15 @@ int menu_screen() {
             return -1;
         }
         case 3: {
+            clear_screen();
+            ifstream menuScreenInfo;
+            open_file(menuScreenInfo, "Data/howtoplay.txt");
+            print(read_ifstream_to_list(menuScreenInfo, 1, ','));
+            wait_for_enter();
+            menu_screen();
+            return -1;
+        }
+        case 4: {
             return -1;
         }
     }

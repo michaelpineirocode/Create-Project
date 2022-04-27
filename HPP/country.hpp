@@ -23,7 +23,7 @@ class Country {
         int id;
         
         // public operations
-        void new_day( int& totalInfected, list<Country>& untouched, list<Country>& infectedCountry);
+        void new_day( int& totalInfected, list<Country>& untouched, list<Country>& infectedCountry,  int& lastID);
         void infect();
 
         // getters!
@@ -48,8 +48,8 @@ class Country {
         void infect(int& totalInfected);
         void update_infectRate();
         void update_spreadRate();
-        void spread(list<Country>& untouched, list<Country>& infectedCountry);
-        void spreadToCountry(list<Country>& infected, list<Country>& untouched);
+        void spread(list<Country>& untouched, list<Country>& infectedCountry, int& lastID);
+        void spreadToCountry(list<Country>& infected, list<Country>& untouched, int& lastID);
 
 };
 
@@ -96,11 +96,11 @@ bool operator==(const Country& COUNTRY, const Country& OTHER) {
 
 Country::~Country() = default;
 
-void Country::new_day( int& totalInfected, list<Country>& untouched, list<Country>& infectedCountry) {
+void Country::new_day( int& totalInfected, list<Country>& untouched, list<Country>& infectedCountry, int& lastID) {
     update_infectRate();
     update_spreadRate();
     infect(totalInfected);
-    spread(untouched, infectedCountry);
+    spread(untouched, infectedCountry, lastID);
 
 }
 
@@ -153,9 +153,9 @@ void Country::update_spreadRate() {
     spreadRate = infectRate / 100;
 }
 
-void Country::spread(list<Country>& untouched, list<Country>& infected) {
+void Country::spread(list<Country>& untouched, list<Country>& infected, int& lastID) {
     if(rand_int(0, 1001) < spreadRate) {
-        spreadToCountry(infected, untouched);
+        spreadToCountry(infected, untouched, lastID);
     }
 }
 
@@ -175,13 +175,13 @@ void Country::infect() {
     }
 }
 
-void Country::spreadToCountry(list<Country>& infected, list<Country>& untouched) {
+void Country::spreadToCountry(list<Country>& infected, list<Country>& untouched, int& lastID) {
     if(untouched.size() == 0) {
         return;
     } else {
-        cout << "Spreading to a new country!" << endl;
         Country infectedCountry = get(untouched, rand_int(0, untouched.size() - 1));
         infectedCountry.infect();
+        infectedCountry.id = ++lastID;
         infected.push_back(infectedCountry);
         untouched.remove(infectedCountry);
     }
