@@ -11,10 +11,11 @@ int Simulate(const list<string> countryNames, list<int> population) {
 
     list<Country> untouched; // create all countries
     list<Country> infectedCountries;
-    int totalInfected = 1;
+    long int totalInfected = 1;
     const long int WORLD_POPULATION = 7808449406;
     int day = 1;
     int lastID = 1;
+    bool skip = false;
 
     for(int i = 0; i < countryNames.size(); i++) {
         Country country(get(countryNames, i), get(population, i));
@@ -41,9 +42,11 @@ int Simulate(const list<string> countryNames, list<int> population) {
         infectedCountries = mergeSort(infectedCountries);
        
         // print every country
-        for(int i = 0; i < infectedCountries.size(); i++) {
-            Country current = get(infectedCountries, i);
-            current.print_info();
+        if(!skip) {
+            for(int i = 0; i < infectedCountries.size(); i++) {
+                Country current = get(infectedCountries, i);
+                current.print_info();
+            }
         }
         // a new day for each country
         for(int i = 0; i < infectedCountries.size(); i++) {
@@ -57,7 +60,18 @@ int Simulate(const list<string> countryNames, list<int> population) {
             wait_for_enter(false);
             return 1;
         }
-        wait_for_enter(false);
+        // get user input and check for quit, skip, or ok command
+        if(!skip) {
+            const int INPUT = wait_for_enter(false);
+            switch(INPUT) {
+                case -1: {
+                    return -1;
+                }
+                case 1: {
+                    skip = true;
+                }
+            }
+        }
     }
 
 }

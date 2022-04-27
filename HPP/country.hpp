@@ -23,7 +23,7 @@ class Country {
         int id;
         
         // public operations
-        void new_day( int& totalInfected, list<Country>& untouched, list<Country>& infectedCountry,  int& lastID);
+        void new_day(long int& totalInfected, list<Country>& untouched, list<Country>& infectedCountry,  int& lastID);
         void infect();
 
         // getters!
@@ -43,7 +43,7 @@ class Country {
         int spreadRate;
 
         // private operations
-        void infect(int& totalInfected);
+        void infect(long int& totalInfected);
         void update_infectRate();
         void update_spreadRate();
         void spread(list<Country>& untouched, list<Country>& infectedCountry, int& lastID);
@@ -90,7 +90,7 @@ bool operator==(const Country& COUNTRY, const Country& OTHER) {
 
 Country::~Country() = default;
 
-void Country::new_day( int& totalInfected, list<Country>& untouched, list<Country>& infectedCountry, int& lastID) {
+void Country::new_day(long int& totalInfected, list<Country>& untouched, list<Country>& infectedCountry, int& lastID) {
     update_infectRate();
     update_spreadRate();
     infect(totalInfected);
@@ -148,7 +148,7 @@ void Country::spread(list<Country>& untouched, list<Country>& infected, int& las
     }
 }
 
-void Country::infect(int& totalInfected) {
+void Country::infect(long int& totalInfected) {
     for(int i = 0; i < infected; i ++) { // for each infected person
         int ODDS = rand_int(0, 1001);
         if((ODDS <= infectRate) && (infected < population)) {

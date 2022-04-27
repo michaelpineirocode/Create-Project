@@ -49,6 +49,6 @@ int main() {
     } else {
         Simulate(countryNames, population);
     }
-    
+    cout << "Goodbye!" << endl;
 
 }
