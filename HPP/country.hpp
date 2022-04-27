@@ -14,12 +14,13 @@ class Country {
     public:
         // constructors!
         Country(const string NAME, const int POPULATION);
-        Country(const string NAME, const int POPULATION, const int INFECTED, const int VACCINATED);
+        Country(const string NAME, const int POPULATION, const int INFECTED, const int VACCINATED, const int ID);
         Country& operator=(const Country& OTHER);
         ~Country();
         
         // public attributes
         string name;
+        int id;
         
         // public operations
         void new_day( int& totalInfected, list<Country>& untouched, list<Country>& infectedCountry);
@@ -62,7 +63,7 @@ Country::Country(const string NAME, const int POPULATION) {
     vaccinated = 0;
 }
 
-Country::Country(const string NAME, const int POPULATION, const int INFECTED, const int VACCINATED) {
+Country::Country(const string NAME, const int POPULATION, const int INFECTED, const int VACCINATED, const int ID) {
     name = NAME;
     population = POPULATION;
     infected = INFECTED;
@@ -70,6 +71,7 @@ Country::Country(const string NAME, const int POPULATION, const int INFECTED, co
     infectRate = 0;
     spreadRate = 0;
     vaccinated = 0;
+    id = ID;
 }
 
 Country& Country::operator=(const Country& OTHER) {
@@ -108,7 +110,7 @@ void Country::print_info() {
     cout << "\t" << "Infected: " << infected << endl;
     cout << "\t" << "Vaccinated: " << vaccinated << endl;
     cout << "\t" << "Infection Rate: " << "(" << infectRate << " / 1000) people per day" << endl;
-    cout << "\t" << "Chance of Spreading: " << spreadRate << "%" << endl;
+    cout << "\t" << "Chance of Spreading: " << spreadRate << endl;
 
 }
 
@@ -136,10 +138,13 @@ void Country::update_infectRate() {
     //const int CONT_FACTOR = ceil(double(1/1000) / (1 / POPULATION)) ; // helps smooth scaling between different populations
     //infectRate = (double(INFECTED) / POPULATION) * CONT_FACTOR;
     if(infectRate < 1000) {
-        infectRate = infectRate + ceil(((double)infected / population));
+        infectRate = infectRate + ((double)infected / population) * 1000;
         //cout << infectRate << endl;
-        if(rand_int(1, 3) == 2) {
+        if(rand_int(1, 3) == 2) { // gets the game started and keeps the game moving at a reasonable rate
             infectRate++;
+        }
+        if(infectRate > 1000) {
+            infectRate = 1000;
         }
     }
 }
@@ -157,7 +162,7 @@ void Country::spread(list<Country>& untouched, list<Country>& infected) {
 void Country::infect(int& totalInfected) {
     for(int i = 0; i < infected; i ++) { // for each infected person
         int ODDS = rand_int(0, 1001);
-        if((ODDS <= infectRate) && (infected <= population)) {
+        if((ODDS <= infectRate) && (infected < population)) {
             infected++;
             totalInfected++;
         }
@@ -176,9 +181,9 @@ void Country::spreadToCountry(list<Country>& infected, list<Country>& untouched)
     } else {
         cout << "Spreading to a new country!" << endl;
         Country infectedCountry = get(untouched, rand_int(0, untouched.size() - 1));
+        infectedCountry.infect();
         infected.push_back(infectedCountry);
         untouched.remove(infectedCountry);
-        infectedCountry.infect();
     }
 }
 
