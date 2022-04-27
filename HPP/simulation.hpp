@@ -11,6 +11,7 @@ int Simulate(const list<string> countryNames, list<int> population) {
 
     list<Country> untouched; // create all countries
     list<Country> infectedCountries;
+    list<string> overtaken;
     long int totalInfected = 1;
     const long int WORLD_POPULATION = 7808449406;
     int day = 1;
@@ -40,9 +41,16 @@ int Simulate(const list<string> countryNames, list<int> population) {
        
         // resort the list
         infectedCountries = mergeSort(infectedCountries);
-       
-        // print every country
+
+        // print every infected and overtaken country
         if(!skip) {
+            if(overtaken.size() != 0) {
+                cout << "Overtaken countries: " << endl;
+                for(int i = 0; i < overtaken.size(); i++) {
+                    cout << '\t' << get(overtaken, i) << endl;
+                }
+            cout << endl;
+            }
             for(int i = 0; i < infectedCountries.size(); i++) {
                 Country current = get(infectedCountries, i);
                 current.print_info();
@@ -52,7 +60,7 @@ int Simulate(const list<string> countryNames, list<int> population) {
         for(int i = 0; i < infectedCountries.size(); i++) {
             Country current = get(infectedCountries, i);
             infectedCountries.remove(current);
-            current.new_day(totalInfected, untouched, infectedCountries, lastID);
+            current.new_day(totalInfected, untouched, infectedCountries, lastID, overtaken);
             infectedCountries.push_front(current);
         }
         if(totalInfected >= WORLD_POPULATION) {

@@ -23,7 +23,7 @@ class Country {
         int id;
         
         // public operations
-        void new_day(long int& totalInfected, list<Country>& untouched, list<Country>& infectedCountry,  int& lastID);
+        void new_day(long int& totalInfected, list<Country>& untouched, list<Country>& infectedCountry,  int& lastID, list<string>& overtaken);
         void infect();
 
         // getters!
@@ -44,7 +44,7 @@ class Country {
 
         // private operations
         void infect(long int& totalInfected);
-        void update_infectRate();
+        void update_infectRate(list<Country>& infectedCountry, list<string>& overtaken);
         void update_spreadRate();
         void spread(list<Country>& untouched, list<Country>& infectedCountry, int& lastID);
         void spreadToCountry(list<Country>& infected, list<Country>& untouched, int& lastID);
@@ -90,8 +90,8 @@ bool operator==(const Country& COUNTRY, const Country& OTHER) {
 
 Country::~Country() = default;
 
-void Country::new_day(long int& totalInfected, list<Country>& untouched, list<Country>& infectedCountry, int& lastID) {
-    update_infectRate();
+void Country::new_day(long int& totalInfected, list<Country>& untouched, list<Country>& infectedCountry, int& lastID, list<string>& overtaken) {
+    update_infectRate(infectedCountry, overtaken);
     update_spreadRate();
     infect(totalInfected);
     spread(untouched, infectedCountry, lastID);
@@ -123,7 +123,7 @@ int Country::get_spread_rate() const{
     return spreadRate;
 }
 
-void Country::update_infectRate() {
+void Country::update_infectRate(list<Country>& infectedCountry, list<string>& overtaken) {
     //const int CONT_FACTOR = ceil(double(1/1000) / (1 / POPULATION)) ; // helps smooth scaling between different populations
     //infectRate = (double(INFECTED) / POPULATION) * CONT_FACTOR;
     if(infectRate < 1000) {
@@ -135,6 +135,9 @@ void Country::update_infectRate() {
         if(infectRate > 1000) {
             infectRate = 1000;
         }
+    } else {
+        overtaken.push_back(this->name);
+
     }
 }
 

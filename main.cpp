@@ -14,7 +14,14 @@
  * How to access cmd or terminal
  * https://stackoverflow.com/questions/14532496/try-to-execute-command-line-codes-from-c-linux
  * 
- * Description: 
+ * Description: In this program I create a simulator which simulates the spread of a contagious disease
+ * which spreads from country-to-country. The goal is to output the number of days it takes for a uncontrolled
+ * contagious disease to infect every person. The program reads in data from Data/population.csv about country
+ * population and creates lists of objects every country. The program also utilizes different .txt files from
+ * within the /Data directory to display menu options. At the start a random country is chosen as "ground zero."
+ * The user has the choice to press or hold enter to pass days, or to type in the command "skip" or "quit."
+ * Skipping will run the simulation and print out the number of days that it took for the entire world to be
+ * infected.
  */
 
 #include <iostream>
