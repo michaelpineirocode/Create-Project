@@ -11,7 +11,7 @@ int Simulate(const list<string> countryNames, list<int> population) {
 
     list<Country> untouched; // create all countries
     list<Country> infectedCountries;
-    list<string> overtaken;
+    list<Country> overtaken;
     long int totalInfected = 1;
     const long int WORLD_POPULATION = 7808449406;
     int day = 1;
@@ -33,21 +33,33 @@ int Simulate(const list<string> countryNames, list<int> population) {
     cout << "Press enter to continue." << endl;
     wait_for_enter();
     clear_screen();
-    while(totalInfected != WORLD_POPULATION) {
+    while(true) {
         clear_screen();
         cout << "---------------------------------------------------------------------------------" << endl;
         cout << "Day: " << day << endl;
+        cout << "Infected: " << totalInfected << endl;
+        cout << "World population: " << WORLD_POPULATION << endl;
+        cout << "Infected countries: " << infectedCountries.size() << endl;
+        cout << "Overtaken countries: " << overtaken.size() << endl;
+        cout << "Untouched countries: " << untouched.size() << endl;
         day++;
        
+        if(totalInfected >= WORLD_POPULATION) {
+            cout << "The entire world has been infected in " << day - 1 << " days!" << endl;
+            cout << "Press enter to continue" << endl;
+            wait_for_enter(false);
+            return 1;
+        }
+
         // resort the list
-        infectedCountries = mergeSort(infectedCountries);
+        //infectedCountries = mergeSort(infectedCountries);
 
         // print every infected and overtaken country
         if(!skip) {
             if(overtaken.size() != 0) {
-                cout << "Overtaken countries: " << endl;
+                cout << "Overtaken countries: " << "                 Note: overtaken countries can still spread!" << endl;
                 for(int i = 0; i < overtaken.size(); i++) {
-                    cout << '\t' << get(overtaken, i) << endl;
+                    cout << '\t' << get(overtaken, i).name << endl;
                 }
             cout << endl;
             }
@@ -56,18 +68,24 @@ int Simulate(const list<string> countryNames, list<int> population) {
                 current.print_info();
             }
         }
-        // a new day for each country
+        // a new day for each country still being infected
         for(int i = 0; i < infectedCountries.size(); i++) {
             Country current = get(infectedCountries, i);
             infectedCountries.remove(current);
-            current.new_day(totalInfected, untouched, infectedCountries, lastID, overtaken);
-            infectedCountries.push_front(current);
+            current.new_day(totalInfected, untouched, infectedCountries, lastID);
+            if(current.get_infect_rate() != 1000) {
+                infectedCountries.push_front(current);
+            } else if(current.overtaken) {
+                overtaken.push_back(current);
+                current.overtaken = false;
+            }
         }
-        if(totalInfected >= WORLD_POPULATION) {
-            cout << "The entire world has been infected in " << day << " days!" << endl;
-            wait_for_enter(false);
-            return 1;
+        // continue attempting to spread for countries that have been overtaken
+        for(int i = 0; i < overtaken.size(); i++) {
+            Country current = get(overtaken, i);
+            current.spread(untouched, infectedCountries, lastID);
         }
+
         // get user input and check for quit, skip, or ok command
         if(!skip) {
             const int INPUT = wait_for_enter(false);

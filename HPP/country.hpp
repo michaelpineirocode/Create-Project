@@ -21,9 +21,12 @@ class Country {
         // public attributes
         string name;
         int id;
+        bool overtaken = false;
+        bool canSpread = true;
         
         // public operations
-        void new_day(long int& totalInfected, list<Country>& untouched, list<Country>& infectedCountry,  int& lastID, list<string>& overtaken);
+        void new_day(long int& totalInfected, list<Country>& untouched, list<Country>& infectedCountry,  int& lastID);
+        void spread(list<Country>& untouched, list<Country>& infectedCountry, int& lastID);
         void infect();
 
         // getters!
@@ -44,10 +47,8 @@ class Country {
 
         // private operations
         void infect(long int& totalInfected);
-        void update_infectRate(list<Country>& infectedCountry, list<string>& overtaken);
+        void update_infectRate(list<Country>& infectedCountry);
         void update_spreadRate();
-        void spread(list<Country>& untouched, list<Country>& infectedCountry, int& lastID);
-        void spreadToCountry(list<Country>& infected, list<Country>& untouched, int& lastID);
 
 };
 
@@ -90,8 +91,8 @@ bool operator==(const Country& COUNTRY, const Country& OTHER) {
 
 Country::~Country() = default;
 
-void Country::new_day(long int& totalInfected, list<Country>& untouched, list<Country>& infectedCountry, int& lastID, list<string>& overtaken) {
-    update_infectRate(infectedCountry, overtaken);
+void Country::new_day(long int& totalInfected, list<Country>& untouched, list<Country>& infectedCountry, int& lastID) {
+    update_infectRate(infectedCountry);
     update_spreadRate();
     infect(totalInfected);
     spread(untouched, infectedCountry, lastID);
@@ -123,7 +124,7 @@ int Country::get_spread_rate() const{
     return spreadRate;
 }
 
-void Country::update_infectRate(list<Country>& infectedCountry, list<string>& overtaken) {
+void Country::update_infectRate(list<Country>& infectedCountry) {
     //const int CONT_FACTOR = ceil(double(1/1000) / (1 / POPULATION)) ; // helps smooth scaling between different populations
     //infectRate = (double(INFECTED) / POPULATION) * CONT_FACTOR;
     if(infectRate < 1000) {
@@ -134,10 +135,8 @@ void Country::update_infectRate(list<Country>& infectedCountry, list<string>& ov
         }
         if(infectRate > 1000) {
             infectRate = 1000;
+            overtaken = true;
         }
-    } else {
-        overtaken.push_back(this->name);
-
     }
 }
 
@@ -147,7 +146,15 @@ void Country::update_spreadRate() {
 
 void Country::spread(list<Country>& untouched, list<Country>& infected, int& lastID) {
     if(rand_int(0, 1001) < spreadRate) {
-        spreadToCountry(infected, untouched, lastID);
+        if(untouched.size() == 0) {
+            return;
+        } else {
+            Country infectedCountry = get(untouched, rand_int(0, untouched.size() - 1));
+            infectedCountry.infect();
+            infectedCountry.id = ++lastID;
+            infected.push_back(infectedCountry);
+            untouched.remove(infectedCountry);
+        }
     }
 }
 
@@ -164,18 +171,6 @@ void Country::infect(long int& totalInfected) {
 void Country::infect() {
     if(infected == 0) {
         infected++;
-    }
-}
-
-void Country::spreadToCountry(list<Country>& infected, list<Country>& untouched, int& lastID) {
-    if(untouched.size() == 0) {
-        return;
-    } else {
-        Country infectedCountry = get(untouched, rand_int(0, untouched.size() - 1));
-        infectedCountry.infect();
-        infectedCountry.id = ++lastID;
-        infected.push_back(infectedCountry);
-        untouched.remove(infectedCountry);
     }
 }
 
