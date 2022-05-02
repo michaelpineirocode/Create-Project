@@ -7,6 +7,7 @@
 #include "country.hpp"
 
 int Simulate(const list<string> countryNames, list<int> population) {
+    // set up the simulation!
     clear_screen();
 
     list<Country> untouched; // create all countries
@@ -17,28 +18,26 @@ int Simulate(const list<string> countryNames, list<int> population) {
     int day = 1;
     int lastID = 1;
     bool skip = false;
-
+    // all the countries start untouched
     for(int i = 0; i < countryNames.size(); i++) {
         Country country(get(countryNames, i), get(population, i));
         untouched.push_back(country);
     }
 
+    // create a ground zero!
     Country groundZero = get(untouched, rand_int(0, untouched.size())); // pick a random country
     groundZero.infect();
     groundZero.id = lastID;
     untouched.remove(groundZero);
     infectedCountries.push_back(groundZero);
 
-    cout << "Ground zero: " << endl;
-    cout << get(infectedCountries, 0).name << endl;
-
-    cout << infectedCountries.size() + untouched.size() << endl;
-
     cout << "The first country to become infected is '" << groundZero.name << "' with a population of " << groundZero.get_population() << endl;
     cout << "Press enter to continue." << endl;
     wait_for_enter();
     clear_screen();
+    // start the while loop to the simulatioN!
     while(true) {
+        // all the screen output
         clear_screen();
         cout << "---------------------------------------------------------------------------------" << endl;
         cout << "Day: " << day << endl;
@@ -48,6 +47,7 @@ int Simulate(const list<string> countryNames, list<int> population) {
         cout << "Overtaken countries: " << overtaken.size() << endl;
         cout << "Untouched countries: " << untouched.size() << endl;
         day++;
+        // base case to end the simulation
         if(totalInfected >= WORLD_POPULATION) {
             cout << "The entire world has been infected in " << day - 1 << " days!" << endl;
             cout << "Press enter to continue" << endl;
@@ -55,20 +55,7 @@ int Simulate(const list<string> countryNames, list<int> population) {
             return 1;
         }
 
-        if(infectedCountries.size() + untouched.size() + overtaken.size() != 235) {
-            cout << "Paused " << infectedCountries.size() + untouched.size() + overtaken.size() << endl;
-            cout << "Infected: " << endl;
-            for(int i = 0; i < infectedCountries.size(); i++) {
-                Country current = get(infectedCountries, i);
-                current.print_info();
-                cout << "----------" << endl;
-            }
-
-            wait_for_enter();
-
-        }
-
-        // resort the list
+        // resort the list to always output in the right order
         infectedCountries = mergeSort(infectedCountries);
 
         // print every infected and overtaken country
