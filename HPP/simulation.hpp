@@ -19,7 +19,7 @@ void Simulate(const list<string> countryNames, list<int> population) {
     list<Country> untouched; // create all countries
     list<Country> infectedCountries;
     list<Country> overtaken;
-    long int totalInfected = 1;
+    long long int totalInfected = 1;
     const long long int WORLD_POPULATION = 7808449172;
     int day = 1;
     int lastID = 1;
