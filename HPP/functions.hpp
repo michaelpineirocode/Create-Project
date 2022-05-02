@@ -99,7 +99,7 @@ list<string> read_ifstream_to_list(ifstream &ifile, const int columnNum, const c
 }
 
 int rand_int(const int MIN, const int MAX) {
-    int num = (rand() % MAX) + MIN - 1;
+    int num = (rand() % MAX) + MIN;
     return num;
 }
 

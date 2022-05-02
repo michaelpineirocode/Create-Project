@@ -13,13 +13,13 @@ using namespace std;
 class Country {
     public:
         // constructors!
-        Country(const string NAME, const int POPULATION);
-        Country(const string NAME, const int POPULATION, const int INFECTED, const int ID);
+        Country(const string NAME, const long int POPULATION);
+        Country(const string NAME, const long int POPULATION, const int INFECTED, const int ID);
         Country& operator=(const Country& OTHER);
         ~Country();
         
         // public attributes
-        string name;
+        string name = "NONE";
         int id;
         bool overtaken = false;
         bool canSpread = true;
@@ -40,7 +40,7 @@ class Country {
 
     private:
         // private attributes
-        int population;
+        long int population;
         int infected;
         int infectRate;
         int spreadRate;
@@ -53,7 +53,7 @@ class Country {
 };
 
 
-Country::Country(const string NAME, const int POPULATION) {
+Country::Country(const string NAME, const long int POPULATION) {
     name = NAME;
     population = POPULATION;
     infected = 0;
@@ -61,11 +61,11 @@ Country::Country(const string NAME, const int POPULATION) {
     spreadRate = 0;
 }
 
-Country::Country(const string NAME, const int POPULATION, const int INFECTED, const int ID) {
+Country::Country(const string NAME, const long int POPULATION, const int INFECTED, const int ID) {
     name = NAME;
     population = POPULATION;
     infected = INFECTED;
-    infectRate = 0;
+    infectRate = 999;
     spreadRate = 0;
     id = ID;
 }
@@ -93,10 +93,11 @@ Country::~Country() = default;
 
 void Country::new_day(long int& totalInfected, list<Country>& untouched, list<Country>& infectedCountry, int& lastID) {
     update_infectRate(infectedCountry);
-    update_spreadRate();
     infect(totalInfected);
-    spread(untouched, infectedCountry, lastID);
-
+    if(untouched.size() > 0) {
+        spread(untouched, infectedCountry, lastID);
+        update_spreadRate();
+    }
 }
 
 void Country::print_info() {
@@ -105,6 +106,7 @@ void Country::print_info() {
     cout << "\t" << "Infected: " << infected << endl;
     cout << "\t" << "Infection Rate: " << "(" << infectRate << " / 1000) people per day" << endl;
     cout << "\t" << "Chance of Spreading: " << spreadRate << endl;
+    cout << "\t" << "ID: " << id << endl;
 
 }
 
@@ -133,10 +135,12 @@ void Country::update_infectRate(list<Country>& infectedCountry) {
         if(rand_int(1, 3) == 2) { // gets the game started and keeps the game moving at a reasonable rate
             infectRate++;
         }
-        if(infectRate > 1000) {
+        if(infectRate >= 1000) {
             infectRate = 1000;
             overtaken = true;
         }
+    } else {
+        overtaken = true;
     }
 }
 
@@ -149,7 +153,7 @@ void Country::spread(list<Country>& untouched, list<Country>& infected, int& las
         if(untouched.size() == 0) {
             return;
         } else {
-            Country infectedCountry = get(untouched, rand_int(0, untouched.size() - 1));
+            Country infectedCountry = get(untouched, rand_int(0, untouched.size()));
             infectedCountry.infect();
             infectedCountry.id = ++lastID;
             infected.push_back(infectedCountry);

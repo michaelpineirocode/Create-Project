@@ -48,6 +48,7 @@ int main() {
     list<string> populationRaw = read_ifstream_to_list(csv, 2, ',', true);
     csv.close();
     list<int> population = string_to_int(populationRaw);
+    cout << population.size() << endl;
     populationRaw.clear(); // clear old list as it won't be used anymore
     if(menu_screen() == -1) {
         clear_screen();
