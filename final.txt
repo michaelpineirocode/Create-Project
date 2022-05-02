@@ -1,0 +1,47 @@
+Title:
+Michael Pineiro
+Section B
+Contagious Disease Simulator
+
+Problem Description:
+In early 2020, the outbreak of COVID-19 around the world striked harshly, in part due to our misinterpretations of the spread of the disease. This project will simulate the spread of a contagious disease within a random origin country, and use population data as a metric of how many people will contract the disease per day. As time goes on, the rate that an infection spreads internally within a country, and to other countries will increase. The purpose of this project is not to be an accurate indicator of the spread of diseases such as COVID-19, but to observe the trends of unrestrained infectious diseases over time. The program will run until everybody on Earth is infected, ignoring factors like vaccination, immunity, or lockdown. The program will work by selecting a random country from a list of countries, and calculating a rate of transmission based on population metrics within a file. Then, the user can press enter to move to the next day, where the statistics will be updated. Depending on the rate of transmission, the likelihood that somebody in any of the infected countries travels to another country and infects somebody increases, thereby adding another infected country.
+
+Program Documentation:
+At menu screens, press a button and "enter" to proceed to the option. There is a "how to play" screen which goes into detail about many facets of the game. When in the simulation, press enter to continue to the next day. You can press and hold to skip past many days. If you type 'skip', the simulation will continue to run without outputting data about individual countries, but continue to output overall global trends. Typing 'skip' at any point will remove all user input abilities until the end. Typing 'quit' during the simulation will quit the game. The entire simulation takes anywhere between 3 to 10 minutes to run.
+
+Each country's statistics are printed each day. The infection rate is the rate that people can become randomly infected each day. Chance of spreading is a metric between 0 and 10 which represents the a likelihood between 0 and 1/100 that the infection will spread to another country on any given day. Even after all the people of a country are infected there is still a chance of spreading the disease to a new country every day. Smaller countries may look like they stalled at the start but they have not. Continue holding the enter key to and an individual within another country will eventually become infected. When country has been totally infected it is considered overtaken and will appear in a smaller list.
+
+The simulation increments in days. Because the chance of spreading is so low at the start of the simulation, there may be up to a couple hundred days where very few advancements occur at the start of the game. Continue the simulation as normal, eventually the disease spreads to another country. 
+
+If I had more time, I would implement different menu screens that pop up at different milestones, such as when all countries have been infected, half the world has been infected, etc. I implemented a function "print_file_to_screen(const string PATH)" which takes any file and prints to the screen, using the ',' character
+as a delineator between lines. So, somebody could create several conditionals within the while loop in Simulation to display certain milestones at different times and wait for the user to press enter.
+
+If I had even more time, I would implement a vaccination population and vaccination rate that increased as time went on. A future programmer could add a "vaccinated" and "vaccineRate" data member to a country and a "updateVaccineRate" and "updateVaccinated" method. For each new_day(), test if the country has anybody vaccinated. If not, randomly select a number between 1 and 100 and if it equals 1 then seed the first vaccinated person. If somebody is vaccinated, update the vaccinated rate and vaccinate people within the country. Then, instead of checking if everybody in the world has been infected, test whether everybody in the world has been infected or vaccinated. When the game ends, output how many people were vaccinated/immune, and how many people were infected.
+
+There are many calculations occuring per day. When the infected countries list grows substantially, the time between days may slow down a bit. This is to be expected. The simulation still runs as normal without enormous wait times.
+
+Data Structure:
+A doubly linked list from the C++ standard library will be the data structure of choice because of its efficiency at adding and removing new elements, and it’s ease of traversal. I used lists multiple times throughout the simulation. The first use was to take each column out of the population data csv file and save the country names and population into two seperate lists. Then, that data was used to create a list of all untouched countries. As the simulation continued, two more lists kept track of what countries had at least 1 infected individual, and another kept track of countries that were completely overtaken. These lists were required for keeping track of different sets of related data, and to perform different operations on each set throughout the simulation.
+
+Tests:
+1.) Ensures user input is within bounds.
+If the user inputs something that is not within the bounds on a menu screen, such as 1-4 on the main screen, then the program prompts the user to input the correct number. Also ensures that the input is an integer, or else it prompts the user to enter the correct number.
+
+2.) Ensures that a file opened properly.
+When opening a file, the function open_file(ifstream) returns false if the file did not open properly. If this is the case, an error is outputted and the program terminates early. If a file that is only being printed to the screen doesn't open for some reason, the screen clears and nothing else will be outputted.
+
+3.) Ensures user input was a command or continues to next day
+For each day, the user can type in the commands "skip," "quit," or any other input. All commands are converted to lowercase to ensure that if the user utilizes a capital letter, such as "Skip" or "SKIP", that the program will still skip. If the user does not enter a known command, the simulation continues to the next day.
+
+4.) Use compiler flags to determine what clearscreen command to use depending on OS.
+When clearing the screen, there are compiler flags that are utilized to execute different code. If the OS is windows, the command is "cls", otherwise the command is "clear".
+
+5.) Outputted Countries are resorted to prevent mixing and keep easier to keep track of
+Because of the way infected countries are infected each day, the list can get out of order, making observing each country's data difficult and time consuming. I added an ID data member that chronologically numbers each country and is sorted with merge sort at the start of each new day. This keeps the output smooth to the user.
+
+6.) Checks country status to only perform neccessary computations
+The simulation is computationally heavy, therefore I divided countries into three categories, which do different calculations at different times in the simulation. If a country is untouched, it does nothing. If it is infected, it updates the number of infected people, updates the rate of infection, the rate of spreading, and attempts to spread to other countries. If a country is completely overtaken, it can still spread to other countries, but all other computations are unneccessary because everybody has been infected.
+
+Reflections:
+I was able to implement a lot from what I learned this year on this project! I needed to utilize a doubly linked list, merge sort, pointers, classes, file IO, and more! I learned a lot about the process of optimizing an existing program. For example, the simulation was running EXTREMELY slow at certain points of the simulation. It turned out that the reason was because the infectedCountry list retained countries that had been completely overtaken, thus iterating through new_day() many times when it didn't need to. I took time to break down what was slowing the program, implemented a system where overtaken countries were treated differently, and the program finished almost two times faster. 
+There was a point where I had a very bad indexing error, causing the country lists to add an empty country with a population of a maximum long int. I spent a long time debugging the program until I found that the indexing error was coming from my rand_int() function. After fixing the error, the program functioned as expected again.

@@ -6,7 +6,13 @@
 #include "functions.hpp"
 #include "country.hpp"
 
-int Simulate(const list<string> countryNames, list<int> population) {
+/**
+ * @brief The main simulation function that does start up and holds the while loop
+ * 
+ * @param countryNames a list of all country names
+ * @param population  a list of the population of each country, where each element's index coresponds with countryNames
+ */
+void Simulate(const list<string> countryNames, list<int> population) {
     // set up the simulation!
     clear_screen();
 
@@ -35,6 +41,7 @@ int Simulate(const list<string> countryNames, list<int> population) {
     cout << "Press enter to continue." << endl;
     wait_for_enter();
     clear_screen();
+
     // start the while loop to the simulatioN!
     while(true) {
         // all the screen output
@@ -52,7 +59,7 @@ int Simulate(const list<string> countryNames, list<int> population) {
             cout << "The entire world has been infected in " << day - 1 << " days!" << endl;
             cout << "Press enter to continue" << endl;
             wait_for_enter(false);
-            return 1;
+            return;
         }
 
         // resort the list to always output in the right order
@@ -74,6 +81,7 @@ int Simulate(const list<string> countryNames, list<int> population) {
                 current.print_info();
             }
         }
+
         // a new day for each country still being infected
         for(int i = 0; i < infectedCountries.size(); i++) {
             Country current = get(infectedCountries, i);
@@ -99,7 +107,7 @@ int Simulate(const list<string> countryNames, list<int> population) {
             const int INPUT = wait_for_enter(false);
             switch(INPUT) {
                 case -1: {
-                    return -1;
+                    return;
                 }
                 case 1: {
                     skip = true;
@@ -107,9 +115,14 @@ int Simulate(const list<string> countryNames, list<int> population) {
             }
         }
     }
-    return 1;
+    return;
 }
 
+/**
+ * @brief displays the main menu and contains logic for what do do if the user presses a corresponding button
+ * 
+ * @return int corresponding to whether to return to menuScreen again or start simulation
+ */
 int menu_screen() {
     clear_screen();
     ifstream menuScreenInfo;
@@ -134,6 +147,7 @@ int menu_screen() {
             return -1;
         }
     }
+    return 0; // this will never happen but is put to avoid warning
 }
 
 

@@ -22,21 +22,43 @@ int get_user_input(const int MIN, const int MAX) {
         while(!(cin >> option)) {
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Please enter an option"<< endl;
+            cout << "Please enter an option between " << MIN << " and " << MAX << endl;
         }
         // ensures that the integer is between the bounds
         if ((option >= MIN) && (option <= MAX)) {
             correctOption = true;
-        } else {
-            cout << "Please enter an option" << endl;
+        } else {            
+            cout << "Please enter an option between " << MIN << " and " << MAX << endl;
         }
     }
     return option;
 }
 
+/**
+ * @brief Converts a string to lowercase
+ * 
+ * @param OTHER the other string
+ * @return string that is completely lowercase
+ */
+string convert_to_lowercase(const string OTHER) {
+    string newWord = "";
+    for(int i = 0; i < OTHER.size(); i++) {
+        char c = OTHER.at(i);
+        newWord.append(1, ::tolower(c));
+    }
+    return newWord;
+}
+
+/**
+ * @brief waits for the user to press enter or enter a command
+ * 
+ * @param doTwice whether to wait for user to press enter twice
+ * @return int corresponding whether the user entered a command or skipped
+ */
 int wait_for_enter(bool doTwice=true) {
     string command;
     getline(cin, command);
+    command = convert_to_lowercase(command);
     if(command == "skip") {
         return 1;
     } else if (command == "quit") {
@@ -48,6 +70,10 @@ int wait_for_enter(bool doTwice=true) {
     return 0;
 }
 
+/**
+ * @brief tests what OS user is on and then clears the screen accordingly
+ * 
+ */
 void clear_screen() {
 #if defined(WIN32) || defined(_WIN32) || defined (__WIN32__) || defined(__NT__) || defined(_WIN64)
     system("cls");
@@ -56,6 +82,14 @@ void clear_screen() {
 #endif
 }
 
+/**
+ * @brief opens a filestream
+ * 
+ * @param ifile the file stream for opening
+ * @param FILENAME the name of the file
+ * @return true if the file opened properly
+ * @return false if the file did not open properly
+ */
 bool open_file(ifstream &ifile, const string FILENAME) {
     ifile.open(FILENAME); // opens the file
     if(ifile.fail()) { // checks if it failed
@@ -65,7 +99,16 @@ bool open_file(ifstream &ifile, const string FILENAME) {
     }
 }
 
-list<string> read_ifstream_to_list(ifstream &ifile, const int columnNum, const char DELIM, bool skipFirstLine = false){
+/**
+ * @brief reads file and stores a certain column as list based on deliniator
+ * 
+ * @param ifile input file stream
+ * @param COLUMN_NUM the column that needs to be read in
+ * @param DELIM the deliminator between columns
+ * @param skipFirstLine whether to skip a header
+ * @return list<string> of all contents in the file
+ */
+list<string> read_ifstream_to_list(ifstream &ifile, const int COLUMN_NUM, const char DELIM, bool skipFirstLine = false){
     string currentLine;
     string currentWord = "";
     list<string> words;
@@ -83,7 +126,7 @@ list<string> read_ifstream_to_list(ifstream &ifile, const int columnNum, const c
             //cout << c << endl;
             if(c == DELIM) { // if it is whitespace and the string is not solely whitespace thusfar
                 commas++;
-                if(commas == columnNum) {
+                if(commas == COLUMN_NUM) {
                     words.push_back(currentWord); // send a new word
                     break;
                 } else {
@@ -98,11 +141,26 @@ list<string> read_ifstream_to_list(ifstream &ifile, const int columnNum, const c
     return words;
 }
 
+/**
+ * @brief Returns a random integer within bounds
+ * 
+ * @param MIN inclusive min
+ * @param MAX exclusive max
+ * @return int the random number
+ */
 int rand_int(const int MIN, const int MAX) {
     int num = (rand() % MAX) + MIN;
     return num;
 }
 
+/**
+ * @brief iterates through a list and gets the element at given index
+ * 
+ * @tparam T template variable
+ * @param list1 the list to iterate through
+ * @param INDEX the index of the element to get
+ * @return T the element at the INDEX position
+ */
 template <typename T>
 T get(list<T> list1, const int INDEX) {
     typename list<T>::iterator it;
@@ -111,14 +169,12 @@ T get(list<T> list1, const int INDEX) {
     return *it;
 }
 
-template <typename T>
-typename list<T>::iterator iterate(const int INDEX,  list<T> list1) {
-    typename list<T>::iterator it;
-    it = list1.begin();
-    advance(it, INDEX);
-    return it;
-}
-
+/**
+ * @brief converts a list of strings to a list of integers
+ * 
+ * @param OTHER list of strings
+ * @return list<int> list of integers
+ */
 list<int> string_to_int(const list<string> OTHER) {
     list<int> current;
     for(int i = 0; i < OTHER.size(); i++) {
@@ -127,6 +183,12 @@ list<int> string_to_int(const list<string> OTHER) {
     return current;
 }
 
+/**
+ * @brief print a list
+ * 
+ * @tparam T remplate variable
+ * @param OTHER the list to print
+ */
 template <typename T>
 void print(const list<T> OTHER) {
     for(int i = 0; i < OTHER.size(); i++) {
@@ -134,6 +196,14 @@ void print(const list<T> OTHER) {
     }
 }
 
+/**
+ * @brief Used to remove an element from a list
+ * 
+ * @tparam T the template variable
+ * @param list1 the list to remove an element from
+ * @param INDEX the position of the element to remove
+ * @return list<T> a list with the element removed
+ */
 template <typename T>
 list<T> remove(list<T> list1, const int INDEX) {
     list<T> list2;
@@ -146,6 +216,14 @@ list<T> remove(list<T> list1, const int INDEX) {
     return list2;
 }
 
+/**
+ * @brief merge two lists together
+ * 
+ * @tparam T template variable
+ * @param list1 the first list
+ * @param list2 the second list
+ * @return list<T> the merged list
+ */
 template <typename T>
 list<T> merge(list<T> list1, list<T> list2) {
     
@@ -174,6 +252,13 @@ list<T> merge(list<T> list1, list<T> list2) {
     return list3;
 }
 
+/**
+ * @brief sort a list
+ * 
+ * @tparam T template variable
+ * @param list1 the list to sort
+ * @return list<T> a sorted list
+ */
 template <typename T>
 list<T> mergeSort(list<T> list1) {
     // base case
@@ -203,11 +288,19 @@ list<T> mergeSort(list<T> list1) {
     return merge(left, right);
 }
 
+/**
+ * @brief prints a file to the screen
+ * 
+ * @param PATH the path to the file
+ */
 void print_file_to_screen(const string PATH) {
     clear_screen();
     ifstream menuScreenInfo;
-    open_file(menuScreenInfo, PATH);
+    if(!open_file(menuScreenInfo, PATH)) {
+        return; // if the file can't be opened, do nothing.
+    }
     print(read_ifstream_to_list(menuScreenInfo, 1, ','));
+    menuScreenInfo.close();
     wait_for_enter();
 }
 

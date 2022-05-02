@@ -14,7 +14,6 @@ class Country {
     public:
         // constructors!
         Country(const string NAME, const long int POPULATION);
-        Country(const string NAME, const long int POPULATION, const int INFECTED, const int ID);
         Country& operator=(const Country& OTHER);
         ~Country();
         
@@ -61,18 +60,9 @@ Country::Country(const string NAME, const long int POPULATION) {
     spreadRate = 0;
 }
 
-Country::Country(const string NAME, const long int POPULATION, const int INFECTED, const int ID) {
-    name = NAME;
-    population = POPULATION;
-    infected = INFECTED;
-    infectRate = 999;
-    spreadRate = 0;
-    id = ID;
-}
-
 Country& Country::operator=(const Country& OTHER) {
     if(this == &OTHER) {
-        return * this;
+        return *this;
     }
     this->name = OTHER.name;
     this->infected = OTHER.infected;
@@ -106,8 +96,6 @@ void Country::print_info() {
     cout << "\t" << "Infected: " << infected << endl;
     cout << "\t" << "Infection Rate: " << "(" << infectRate << " / 1000) people per day" << endl;
     cout << "\t" << "Chance of Spreading: " << spreadRate << endl;
-    cout << "\t" << "ID: " << id << endl;
-
 }
 
 int Country::get_population() const{
