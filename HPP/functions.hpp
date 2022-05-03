@@ -230,18 +230,18 @@ list<T> merge(list<T> list1, list<T> list2) {
             list3.push_back(get(list2, 0)); // add to list 3
             list2 = remove(list2, 0); // remove the element
         }
-        else {
-            list3.push_back(get(list1, 0));
+        else { // list 2 is greater
+            list3.push_back(get(list1, 0)); // add list 1 to list 3 
             list1 = remove(list1, 0);
         }
     }
     // one of the lists are empty now!
     while(list1.size() > 0) {
-        list3.push_back(get(list1, 0));
+        list3.push_back(get(list1, 0)); // continue adding the rest of elements from other list
         list1 = remove(list1, 0);
     }
 
-    while(list2.size() > 0) {
+    while(list2.size() > 0) { // continue adding the rest of elements from other list
         list3.push_back(get(list2, 0));
         list2 = remove(list2, 0);
     }
