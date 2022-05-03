@@ -66,6 +66,12 @@
         "unordered_map": "cpp",
         "utility": "cpp",
         "vector": "cpp",
-        "*.tcc": "cpp"
+        "*.tcc": "cpp",
+        "__functional_03": "cpp",
+        "memory_resource": "cpp",
+        "random": "cpp",
+        "thread": "cpp",
+        "numeric": "cpp",
+        "stop_token": "cpp"
     }
 }
