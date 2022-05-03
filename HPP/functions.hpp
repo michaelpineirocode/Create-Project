@@ -16,7 +16,7 @@ using namespace std;
   * @return int the choice of the user
   */
 int get_user_input(const int MIN, const int MAX) {
-    int option;
+    int option; 
     bool correctOption = false;
     while(!correctOption) {
         // if the option is not an integer, continues to try to get input
@@ -29,7 +29,7 @@ int get_user_input(const int MIN, const int MAX) {
         if ((option >= MIN) && (option <= MAX)) {
             correctOption = true;
         } else {            
-            cout << "Please enter an option between " << MIN << " and " << MAX << endl;
+            cout << "Please enter an option between " << MIN << " and " << MAX << endl; 
         }
     }
     return option;
@@ -42,10 +42,10 @@ int get_user_input(const int MIN, const int MAX) {
  * @return string that is completely lowercase
  */
 string convert_to_lowercase(const string OTHER) {
-    string newWord = "";
+    string newWord = ""; 
     for(int i = 0; i < OTHER.size(); i++) {
         char c = OTHER.at(i);
-        newWord.append(1, ::tolower(c));
+        newWord.append(1, ::tolower(c)); // append lowercase version of letter to newWord
     }
     return newWord;
 }
@@ -57,17 +57,17 @@ string convert_to_lowercase(const string OTHER) {
  * @return int corresponding whether the user entered a command or skipped
  */
 int wait_for_enter(bool doTwice=true) {
-    string command;
+    string command; // what the user types
     getline(cin, command);
-    command = convert_to_lowercase(command);
-    if(command == "skip") {
+    command = convert_to_lowercase(command); // convert to lowercase so case doesn't matter
+    if(command == "skip") { 
         return 1;
     } else if (command == "quit") {
         return -1;
-    } else if(doTwice) {
-        cin.get();
+    } else if(doTwice) { // sometimes required to press enter twice
+        cin.get(); // get a line again
         return 0;
-    }
+    } // if none of these are true, continue the program
     return 0;
 }
 
@@ -76,10 +76,10 @@ int wait_for_enter(bool doTwice=true) {
  * 
  */
 void clear_screen() {
-#if defined(WIN32) || defined(_WIN32) || defined (__WIN32__) || defined(__NT__) || defined(_WIN64)
+#if defined(WIN32) || defined(_WIN32) || defined (__WIN32__) || defined(__NT__) || defined(_WIN64) // test if windows
     system("cls");
 #else
-    system("clear");
+    system("clear"); // if linux or OSX then use clear
 #endif
 }
 
@@ -94,7 +94,7 @@ void clear_screen() {
 bool open_file(ifstream &ifile, const string FILENAME) {
     ifile.open(FILENAME); // opens the file
     if(ifile.fail()) { // checks if it failed
-        return false;
+        return false; // IT FAILED
     } else {
         return true;
     }
@@ -113,29 +113,25 @@ list<string> read_ifstream_to_list(ifstream &ifile, const int COLUMN_NUM, const 
     string currentLine;
     string currentWord = "";
     list<string> words;
-    int commas = 0;
+    int commas = 0; // commas are often used as the deliminator, so this is the number of deliminators found
     if(skipFirstLine) {
         getline(ifile, currentWord); // need to iterate through once to avoid headers
     }
-    while(getline(ifile, currentLine)) { // iterate through every character in the file
-        //cout <<  currentLine << endl;
-        commas = 0;
+    while(getline(ifile, currentLine)) { // iterate through every line in the file
+        commas = 0; // reset number of deliniators
         currentWord = "";
         for(int i = 0; i < currentLine.size(); i++) {
-            char c = currentLine.at(i);
-            //cout << c;
-            //cout << c << endl;
-            if(c == DELIM) { // if it is whitespace and the string is not solely whitespace thusfar
-                commas++;
+            char c = currentLine.at(i); // get every character
+            if(c == DELIM) { // keep track of number of deliminators we've found
+                commas++; 
                 if(commas == COLUMN_NUM) {
-                    words.push_back(currentWord); // send a new word
-                    break;
+                    words.push_back(currentWord); // add a new word
+                    break; // go to the next line
                 } else {
-                    currentWord = "";
+                    currentWord = ""; // reset the info of the column so far
                 }
             } else {
-                //cout << c;// << "!";
-                currentWord.append(1, c);
+                currentWord.append(1, c); // if it's not a deliminator, add the character to the current word
             }
         }
     }
@@ -150,7 +146,7 @@ list<string> read_ifstream_to_list(ifstream &ifile, const int COLUMN_NUM, const 
  * @return int the random number
  */
 int rand_int(const int MIN, const int MAX) {
-    int num = (rand() % MAX) + MIN;
+    int num = (rand() % MAX) + MIN; // get a random number between [MIN, MAX)
     return num;
 }
 
@@ -164,10 +160,10 @@ int rand_int(const int MIN, const int MAX) {
  */
 template <typename T>
 T get(list<T> list1, const int INDEX) {
-    typename list<T>::iterator it;
-    it = list1.begin();
-    advance(it, INDEX);
-    return *it;
+    typename list<T>::iterator it; // create an iterator
+    it = list1.begin(); // assign to start of list
+    advance(it, INDEX); // go through each item until index
+    return *it; // return value of list at point of iterator
 }
 
 /**
@@ -179,7 +175,7 @@ T get(list<T> list1, const int INDEX) {
 list<int> string_to_int(const list<string> OTHER) {
     list<int> current;
     for(int i = 0; i < OTHER.size(); i++) {
-        current.push_back(stoi(get(OTHER, i)));
+        current.push_back(stoi(get(OTHER, i))); // use stoi() function to push string to list of integers 
     }
     return current;
 }
@@ -192,8 +188,8 @@ list<int> string_to_int(const list<string> OTHER) {
  */
 template <typename T>
 void print(const list<T> OTHER) {
-    for(int i = 0; i < OTHER.size(); i++) {
-        cout << get(OTHER, i) << endl;
+    for(int i = 0; i < OTHER.size(); i++) { // every element in the list
+        cout << get(OTHER, i) << endl; // get the item and print the value
     }
 }
 
@@ -207,14 +203,14 @@ void print(const list<T> OTHER) {
  */
 template <typename T>
 list<T> remove(list<T> list1, const int INDEX) {
-    list<T> list2;
+    list<T> list2; 
     for(int i = 0; i < INDEX - 1; i++) {
-        list2.push_back(get(list1, i));
+        list2.push_back(get(list1, i)); // add to list up UNTIL the removal index
     }
     for(int i = INDEX + 1; i < list1.size(); i++) {
-        list2.push_back(get(list1, i));
+        list2.push_back(get(list1, i)); // add all elements AFTER the indexed element
     }
-    return list2;
+    return list2; // return new list
 }
 
 /**

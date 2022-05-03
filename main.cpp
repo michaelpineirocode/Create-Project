@@ -37,25 +37,28 @@
 using namespace std;
 
 int main() {
-    srand(time(0));
+    srand(time(0)); // seed the random generator with current time
     
-    ifstream csv;
-    open_file(csv, "Data/population.csv");
-    list<string> countryNames= read_ifstream_to_list(csv, 1, ',', true);
+    ifstream csv; // read in the country name info info
+    if(!open_file(csv, "Data/population.csv")) { // test to make sure file can be read
+        cout << "Error reading file!" << endl;
+        cout << "Goodbye!" << endl;
+        return -1;
+    };
+    list<string> countryNames= read_ifstream_to_list(csv, 1, ',', true); // store country names in list
     csv.close();
     
-    open_file(csv, "Data/population.csv");
-    list<string> populationRaw = read_ifstream_to_list(csv, 2, ',', true);
+    open_file(csv, "Data/population.csv"); // read info again
+    list<string> populationRaw = read_ifstream_to_list(csv, 2, ',', true); // store string population data in list
     csv.close();
-    list<int> population = string_to_int(populationRaw);
-    cout << population.size() << endl;
+    list<int> population = string_to_int(populationRaw); // convert string list to integer list
     populationRaw.clear(); // clear old list as it won't be used anymore
     if(menu_screen() == -1) {
         clear_screen();
         cout << "Goodbye!";
         return 1;
     } else {
-        Simulate(countryNames, population);
+        Simulate(countryNames, population); // perform the simulation!
     }
     cout << "Goodbye!" << endl;
 

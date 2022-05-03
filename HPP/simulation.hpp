@@ -68,14 +68,14 @@ void Simulate(const list<string> countryNames, list<int> population) {
         // print every infected and overtaken country
         if(!skip) {
             cout << "Type 'skip' at any time to continue the simulation without pressing enter." << endl;
-
+            // print all overtaken countries
             if(overtaken.size() != 0) {
                 cout << "Overtaken countries: " << "                 Note: overtaken countries can still spread!" << endl;
                 for(int i = 0; i < overtaken.size(); i++) {
                     cout << '\t' << get(overtaken, i).name << endl;
                 }
             cout << endl;
-            }
+            } // print the info of all infected countries
             for(int i = 0; i < infectedCountries.size(); i++) {
                 Country current = get(infectedCountries, i);
                 current.print_info();
@@ -85,13 +85,12 @@ void Simulate(const list<string> countryNames, list<int> population) {
         // a new day for each country still being infected
         for(int i = 0; i < infectedCountries.size(); i++) {
             Country current = get(infectedCountries, i);
-            infectedCountries.remove(current);
-            current.new_day(totalInfected, untouched, infectedCountries, lastID);
+            infectedCountries.remove(current); // remove from list so it can be updated and added back later
+            current.new_day(totalInfected, untouched, infectedCountries, lastID); // update country info
             if(current.get_infect_rate() != 1000) {
-                infectedCountries.push_front(current);
-            } else if(current.overtaken) {
+                infectedCountries.push_front(current); // continue pushing to front if not fully infected
+            } else if(current.overtaken) { // add to overtaken  
                 overtaken.push_back(current);
-                current.overtaken = false;
             }
         }
         // continue attempting to spread for countries that have been overtaken
@@ -107,10 +106,10 @@ void Simulate(const list<string> countryNames, list<int> population) {
             const int INPUT = wait_for_enter(false);
             switch(INPUT) {
                 case -1: {
-                    return;
+                    return; // quit command
                 }
                 case 1: {
-                    skip = true;
+                    skip = true; // skip command
                 }
             }
         }
@@ -124,27 +123,30 @@ void Simulate(const list<string> countryNames, list<int> population) {
  * @return int corresponding to whether to return to menuScreen again or start simulation
  */
 int menu_screen() {
-    clear_screen();
+    clear_screen(); // clear the screen
     ifstream menuScreenInfo;
-    open_file(menuScreenInfo, "Data/menuscreeninfo.txt");
-    print(read_ifstream_to_list(menuScreenInfo, 1, ','));
-    const int menuOption = get_user_input(1, 4);
+    if(!open_file(menuScreenInfo, "Data/menuscreeninfo.txt")) {
+        cout << "Error opening menu screen." << endl;
+        return -1;
+    }
+    print(read_ifstream_to_list(menuScreenInfo, 1, ',')); // print the menu screen
+    const int menuOption = get_user_input(1, 4); // get user input
     switch(menuOption) {
         case 1: {
-            return 1;
+            return 1; // start game
         }
         case 2: {
-            print_file_to_screen("Data/credits.txt");
-            menu_screen();
+            print_file_to_screen("Data/credits.txt"); // read credits
+            menu_screen(); // recursively call the menu screen
             return -1;
         }
         case 3: {
-            print_file_to_screen("Data/howtoplay.txt");
-            menu_screen();
+            print_file_to_screen("Data/howtoplay.txt"); // read howtoplay
+            menu_screen(); // recursively call menu screen
             return -1;
         }
         case 4: {
-            return -1;
+            return -1; // return with -1 to quit
         }
     }
     return 0; // this will never happen but is put to avoid warning
